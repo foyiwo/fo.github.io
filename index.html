@@ -12,18 +12,12 @@ image:
 
 <div id="page-header">
   <div id="page-nav">
-    <router-link to="/item/index" class="page-nav-item">软件分享</router-link>
-    <router-link to="/income/list" class="page-nav-item">新闻收益</router-link>
-    <router-link to="/item/index" class="page-nav-item on-select">博客</router-link>
-    <router-link to="/item/index" class="page-nav-item">工具箱</router-link>
-    <router-link to="/item/index" class="page-nav-item">关于我</router-link>
+    <router-link to="/item/index" class="page-nav-item on-select">王守仁</router-link>
   </div>
   <div id="page-desc">
     你未看此花时，此花与汝同归于寂
   </div>
-  <div id="page-desc">
-    你来看此花时，则此花颜色一时明白起来，便知此花不在你的心外
-  </div>
+ 
 </div>
 
 {% capture site_tags %}{% for tag in site.tags %}{{ tag | first }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
