@@ -70,7 +70,6 @@ body{
     box-shadow: 0 0 43px rgba(0,0,0,.15);
     box-sizing: border-box;
     position: relative;
-    margin: 280px 0px 20px 0px!important;
     
 }
 @media(max-width:669px){//当屏幕最大669时，执行下面css
@@ -81,6 +80,9 @@ body{
         // box-shadow: 0 0 0 0, 0 6px 12px rgba(34,34,34,0.1);
         border-radius: 3px;
     }
+    .index-main{
+        margin: 280px 0px 20px 0px!important;
+    }
 }
     
 @media(min-width:669px){//当屏幕最小669时，执行下面
@@ -90,6 +92,9 @@ body{
         background-color: #fff;
         // box-shadow: 0 0 0 0, 0 6px 12px rgba(34,34,34,0.1);
         border-radius: 3px;
+    }
+    .index-main{
+        margin: 280px!important;
     }
 }
 
