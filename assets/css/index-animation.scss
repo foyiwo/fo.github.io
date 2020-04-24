@@ -66,20 +66,33 @@ body{
     margin: 0 auto;
     width: 100%;
     background-color: #fff;
-    margin-top: 280px!important;
     border-radius: 10px;
     box-shadow: 0 0 43px rgba(0,0,0,.15);
     box-sizing: border-box;
     position: relative;
+    margin: 280px 0px 20px 0px!important;
     
 }
-#post-index .index-article{
-    // margin-bottom: 30px;
-    padding: 20px 80px;
-    background-color: #fff;
-    // box-shadow: 0 0 0 0, 0 6px 12px rgba(34,34,34,0.1);
-    border-radius: 3px;
+@media(max-width:669px){//当屏幕最大669时，执行下面css
+    #post-index .index-article{
+        // margin-bottom: 30px;
+        padding: 20px 20px;
+        background-color: #fff;
+        // box-shadow: 0 0 0 0, 0 6px 12px rgba(34,34,34,0.1);
+        border-radius: 3px;
+    }
 }
+    
+@media(min-width:669px){//当屏幕最小669时，执行下面
+    #post-index .index-article{
+        // margin-bottom: 30px;
+        padding: 20px 80px;
+        background-color: #fff;
+        // box-shadow: 0 0 0 0, 0 6px 12px rgba(34,34,34,0.1);
+        border-radius: 3px;
+    }
+}
+
 .index-tag-heading{
     margin: 0;
     color: #000000;
