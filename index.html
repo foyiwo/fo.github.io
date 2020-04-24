@@ -1,42 +1,40 @@
 ---
-layout: post-index
-title: www.foyiwo.com
+layout: post-index-animation
+title: 
 description: "Describe this nonsense."
 tags: [容器, JAVA, Spring, responsive, blog, modern]
 comments: false
 image:
   feature: abstract-1.jpg
   credit: dargadgetz
-  creditlink: 
+  creditlink:description: "An archive of posts sorted by tag."
 ---
 
-{% for post in paginator.posts %}
-<article class="hentry">
-  <header>
-    {% if post.image.feature %}
-      <div class="entry-image-index">
-        <a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}"><img src="{{ site.url }}/images/{{ post.image.feature }}" alt="{{ post.title }}"></a>
-      </div><!-- /.entry-image -->
-    {% endif %}
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="{{ post.date | date_to_xmlschema }}"><a href="{{ site.url }}{{ post.url }}">{{ post.date | date: "%B %d, %Y" }}</a></time></span><span class="author vcard"><span class="fn"><a href="{{ site.url }}/about/" title="About {{ site.owner.name }}">{{ site.owner.name }}</a></span></span>
-      {% if site.reading_time %}
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        {% include read-time-index.html %}
-      </span><!-- /.entry-reading-time -->
-      {% endif %}
-    </div><!-- /.entry-meta -->
-    {% if post.link %}
-      <h1 class="entry-title"><a href="{{ site.url }}{{ post.url }}" class="permalink" rel="bookmark" title="{{ post.title }}"><i class="fa fa-bookmark"></i></a> <a href="{{ post.link }}">{{ post.title }}</a></h1>
-    {% else %}
-      <h1 class="entry-title"><a href="{{ site.url }}{{ post.url }}" rel="bookmark" title="{{ post.title }}" itemprop="url">{{ post.title }}</a></h1>
-    {% endif %}
-  </header>
-  <div class="entry-content">
-    {{ post.content }}
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-{% endfor %}
+<div id="page-header">
+  <div id="page-nav">
+    <router-link to="/item/index" class="page-nav-item">软件分享</router-link>
+    <router-link to="/income/list" class="page-nav-item">新闻收益</router-link>
+    <router-link to="/item/index" class="page-nav-item on-select">博客</router-link>
+    <router-link to="/item/index" class="page-nav-item">工具箱</router-link>
+    <router-link to="/item/index" class="page-nav-item">关于我</router-link>
+  </div>
+  <div id="page-desc">
+    你未看此花时，此花与汝同归于寂
+  </div>
+  <div id="page-desc">
+    你来看此花时，则此花颜色一时明白起来，便知此花不在你的心外
+  </div>
+</div>
 
-{% include pagination.html %}
+{% capture site_tags %}{% for tag in site.tags %}{{ tag | first }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
+{% assign tags_list = site_tags | split:',' | sort %}
+
+{% for item in (0..site.tags.size) %}{% unless forloop.last %}
+  {% capture this_word %}{{ tags_list[item] | strip_newlines }}{% endcapture %}
+	<div class="index-article">
+	  <h2 id="{{ this_word }}" class="index-tag-heading">{{ this_word }}</h2>
+    {% for post in site.tags[this_word] %}{% if post.title != null %}
+    <div><a class="post-title" href="{{ site.url }}{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></div>
+    {% endif %}{% endfor %}
+	</div><!-- /.hentry -->
+{% endunless %}{% endfor %}

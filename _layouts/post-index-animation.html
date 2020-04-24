@@ -4,7 +4,9 @@
 <!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
 <head>
-{% include head.html %}
+{% include head-animation.html %}
+<!-- For all browsers -->
+
 </head>
 
 <body id="post-index" {% if page.image.feature %}class="feature"{% endif %}>
@@ -12,22 +14,11 @@
 {% include browser-upgrade.html %}
 {% include navigation.html %}
 
-<div class="entry-header">
-  <!--{% if page.image.credit %}<div class="image-credit">Image source: <a href="{{ page.image.creditlink }}">{{ page.image.credit }}</a></div>/.image-credit{% endif %}-->
-  {% if page.image.feature %}
-    <div class="entry-image">
-      <img src="{{ site.url }}/images/{{ page.image.feature }}" alt="{{ page.title }}">
-    </div><!-- /.entry-image -->
-  {% endif %}
-  <div class="header-title">
-    <div class="header-title-wrap">
-      <h1>{{ site.title }}</h1>
-      <h2>{{ page.title }}</h2>
-    </div><!-- /.header-title-wrap -->
-  </div><!-- /.header-title -->
-</div><!-- /.entry-header -->
+<div id="page-advert-item" class="page-advert">
+  <canvas  id="canv" width="1423" height="404"></canvas>
+</div>
 
-<div id="main" role="main">
+<div id="main" class="index-main" role="main">
   {{ content }}
 </div><!-- /#main -->
 
@@ -39,5 +30,17 @@
 
 {% include scripts.html %}          
 
+<script>
+  function loadCanvasScript(){
+    var num = Math.floor(Math.random()*6+1);
+    var script=document.createElement("script");
+    script.type="text/javascript";
+    script.src="http://www.foyiwo.com/web/static/js/animation"+num+".js";
+    document.getElementsByTagName('head')[0].appendChild(script);             
+   }
+   $(function(){
+    loadCanvasScript();
+   })
+</script>
 </body>
 </html>

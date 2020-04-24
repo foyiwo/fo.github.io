@@ -1,0 +1,302 @@
+---
+sitemap: false
+---
+
+/*
+ *
+ *  HPSTR
+ *
+ *  Designer: Michael Rose
+ *  Twitter: http://twitter.com/mmistakes
+ *
+*/
+
+// Partials
+@import "variables";
+@import "mixins";
+@import "reset";
+@import "vendor/font-awesome/font-awesome";
+@import "vendor/magnific-popup/magnific-popup";
+@import "site";
+@import "typography";
+@import "syntax";
+// @import "coderay";
+@import "grid";
+@import "elements";
+@import "animations";
+@import "dl-menu";
+@import "page";
+.post-title{
+    text-decoration: none;
+    color: #269;
+    display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    display: inline-block;
+    vertical-align: auto;
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    -ms-transition: color 0.3s;
+    -o-transition: color 0.3s;
+    transition: color 0.3s;
+    display: inline-block;
+    padding: 3px 10px;
+}
+.link-entry-title{
+    list-style-type: none;
+}
+
+.page-advert{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+#page-advert-item{
+    height: 400px;
+    background-color: #000;
+    text-align: center;
+}
+.index-main{
+    max-width: 999px!important;
+    margin: 0 auto;
+    width: 999px;
+    background-color: #fff;
+    margin-top: 280px!important;
+    border-radius: 10px;
+    box-shadow: 0 0 43px rgba(0,0,0,.15);
+    box-sizing: border-box;
+    position: relative;
+    
+}
+#post-index .index-article{
+    // margin-bottom: 30px;
+    padding: 20px 80px;
+    background-color: #fff;
+    // box-shadow: 0 0 0 0, 0 6px 12px rgba(34,34,34,0.1);
+    border-radius: 3px;
+}
+.index-tag-heading{
+    margin: 0;
+    color: #000000;
+}
+#page-header{
+    height: 122px;
+}
+#page-desc{
+    text-align: center;
+    /*margin-top: 30px;*/
+}
+#page-nav{
+    text-align: center;
+}
+#page-nav .on-select{
+    color: #2980b9;
+}
+.page-nav-item{
+    display: inline-block;
+    color: #888;
+    line-height: 70px;
+    font-size: 18px;
+    margin: 0 25px;
+    padding: 0 30px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.text-center-item:hover{
+    -webkit-box-shadow: 22px 22px 43px rgba(0,0,0,0.15);
+    -moz-box-shadow: 22px 22px 43px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 43px rgba(0,0,0,0.15);
+    -webkit-transform: translateY(-0px) scale(1.01);
+    -moz-transform: translateY(-2px) scale(1.01);
+    -ms-transform: translateY(-2px) scale(1.01);
+    -o-transform: translateY(-2px) scale(1.01);
+    transform: translateY(-0px) scale(1.01);
+}
+.text-center{
+    padding:20px 20px;
+    cursor: pointer;
+    transition: .3s ease all;
+    padding-bottom: 10px;
+    border-radius: 0;
+    margin-bottom: 20px;
+    display: block;
+}
+.page-content-data{
+    height: 96px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #666;
+}
+#article-content{
+    font-size: 13px;
+    text-align: left;
+    /* background-color: #fcfcfc; */
+    /* padding: 15px; */
+    box-sizing: border-box;
+    /* border: 1px solid #e1e1e8; */
+    /*border-radius: 5px;*/
+    font-family: Microsoft Yahei;
+    overflow: hidden;
+    color: #999;
+    text-overflow: ellipsis;
+    /* display: -webkit-box; */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 24px;
+    /* max-height: 48px; */
+    box-sizing: content-box;
+    white-space: normal;
+    /*margin-bottom: 40px;*/
+    /*border-bottom: 1px solid #EEEEEE;*/
+    padding-bottom: 10px;
+
+}
+.page-content-image{
+    float: right;
+    width: 130px;
+    max-height: 130px;
+    overflow: hidden;
+    /* padding-right: 15px; */
+    border-radius: 4px;
+}
+.page-content-image img{
+    width: 100%;
+}
+#page-left{
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 30px;
+    padding-left: 30px;
+    /*border-right: 1px solid #eee;*/
+    padding-top: 10px;
+
+}
+#page-right{
+    float: left;
+    width: 0%;
+    /* padding: 10px; */
+    box-sizing: border-box;
+    padding: 10px 0px;
+    margin-top: 30px;
+    position: fixed;
+    top: 70px;
+    overflow: hidden;
+}
+
+.page-author-username{
+    margin-right: 20px;
+}
+
+.page-category-img img{
+    width: 1.5em;;
+}
+
+.page-label-item{
+    font-size: 16px;
+}
+
+#web-name a{
+    color: #ea6f5a;
+}
+
+.page_title{
+    text-align: left;
+    font-size: 20px;
+    line-height: 1.5em;
+    color: #000000;
+    transition: all .1s ease-in;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: block;
+}
+.page_title:hover{
+    text-decoration: underline;
+}
+.page_label{
+    padding: 0;
+    color: #888;
+    text-align: left;
+    margin: 10px 0 0 0;
+}
+.el-row{
+    margin: 0 auto;
+    width: 999px;
+    background-color: #fff;
+    margin-top: 280px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 43px rgba(0,0,0,0.15);
+}
+.page-width{
+    width: 1150px;
+    margin: 0 auto;
+}
+.text-center .page-content{
+    float: left;
+}
+.text-center .pageContentHasimage{
+    width: 760px;
+    /*padding-right: 15px;*/
+    box-sizing: border-box;
+}
+.header-right{
+    color: #333;
+    line-height: 40px;
+    text-align: right;
+    font-size: 12px;
+    /*border: 1px solid #eee;*/
+}
+.header-right .el-dropdown-link{
+    margin-right: 20px;
+}
+.el-aside {
+    color: #333;
+    position:fixed;
+    height: calc(100% - 20px);
+    background-color: rgb(250, 250, 250);
+    border-right: solid 1px #e6e6e6;
+}
+.page-bar{
+    color: #333;
+    position:fixed;
+    top: 100px;
+    right: 10px;
+    width: 100px;
+}
+
+.page_content_main{
+    width:800px;
+    margin: 0 auto ;
+    height: 50%;
+    overflow: visible;
+}
+
+.right-side{
+    /*margin-left:300px;*/
+}
+
+.doc-title-box{
+    height: auto;
+    margin: 30px 30px 10px 30px;
+    width: auto;
+    border-bottom: 1px solid #ebebeb;
+    padding-bottom: 10px;
+}
+.editormd-html-preview{
+    width: 95%;
+    font-size: 16px;
+}
+
+.header-left{
+    float: left;
+
+}
+
+.header-left-btn{
+    font-size: 20px;
+    margin-top: 5px;
+    margin-left: -15px;
+    cursor: pointer;
+    position: fixed;
+}
