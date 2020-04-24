@@ -26,6 +26,10 @@ sitemap: false
 @import "animations";
 @import "dl-menu";
 @import "page";
+
+body{
+    background-color: #fff;
+}
 .post-title{
     text-decoration: none;
     color: #269;
