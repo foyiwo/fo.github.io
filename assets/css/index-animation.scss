@@ -84,6 +84,9 @@ body{
         margin: 280px 0px 20px 0px!important;
     }
 }
+.footer-wrapper{
+    background-color: #fff;
+}
     
 @media(min-width:669px){//当屏幕最小669时，执行下面
     #post-index .index-article{
@@ -94,7 +97,7 @@ body{
         border-radius: 3px;
     }
     .index-main{
-        margin: 280px!important;
+        margin: 280px auto 0 auto!important;
     }
 }
 

@@ -1,0 +1,160 @@
+I"^$<p><strong>一切的因果，都从这本书开始</strong></p>
+
+<p><img src="http://localhost:4001/images/blogs/5c768a35a0f2a.jpg" alt="" /></p>
+
+<p><strong>Rod Johnson，</strong>就是这本书的作者，也是大名鼎鼎的Spring创始人。</p>
+
+<p>在写该书之前，Rod就已经是一名闻名遐迩的Java架构师了，同时还是JSR154专家组成员，负责定义Servlet规范。</p>
+
+<p>也许是在制定规范时的顿悟，Rod在该书中，以其丰富的经验和洞若观火的洞察力，总结了J2EE的优势与不足。书中配有大量的代码予以佐证，说服力极强。</p>
+
+<p>也许是命运的使然，在2002年的那个普通圣诞假期，同为Java架构师Juergen Hoeller阅读了这本书。</p>
+
+<p>看完之后，他如获珍宝，并一一下载了书中的代码来挨个测试了一遍，最后他给Rod写了一封信，原文未知。</p>
+
+<p>但大致能猜到，是邀请Rod一起搞的框架，两人一拍即合，花了一段时间整理之后，上传到了sourceforge.net上面。</p>
+
+<blockquote>
+  <p>sourceforge.net这可是当时最大的开源网站，地位如同现在的Github。</p>
+</blockquote>
+
+<p>和现在的Github上传代码时一样，首先得有个名字，起个啥名呢？千古流芳那种。这时候有一个在论坛上的读者建议使用Spring，寓意这个项目的未来应该像春天那样，生机勃勃， 他们俩立刻爱上了这个名字，于是我们的Spring就诞生了。</p>
+
+<p>下面我们以版本号为时间线，讲诉Spring诞生至今的旅程故事。</p>
+
+<p>Spring 0.9</p>
+
+<p>自从Rod和Juergen把Spring上传到sourceforge之后，为了不让这个春天夭折了，两人花了大量的时间来不断整理和优化Spring，尽了他们最大努力整理了一个最小的，但可运行的版本出来， 该版本于2003年6月正式发布，这就是Spring的第一个版本：<strong>Spring Framework 0.9</strong>。</p>
+
+<p>Spring Framework 0.9受到了开发者们的热烈欢迎，于是他们两兄弟更是动力十足，再接再厉，在2004年终于发布了真正的1.0版本。</p>
+
+<p>2004年的Spring，还是使用着现在看起来非常笨拙的XML来配置Bean， 直到后来发布的1.2版本，才渐渐开始了对注解的支持，例如@Transactional这些。</p>
+
+<p>在当年，Java帝国中最流行的Web框架是Struts，配合着Jetty或者Tomcat，还有Hibernate。 Spring在其中扮演了粘合剂的角色，把Struts,Hibernate等黏合到一起，史称SSH。 
+<img src="http://localhost:4001/images/blogs/5c76920988c07.png" alt="" /></p>
+
+<p>彼时，Spring还不是主角。就连Spring MVC都还没诞生。</p>
+
+<p><strong>与此同时</strong>，为了扩大Spring的影响力，同时也是为了挣点美钞，于是Rod 和 Juergen合著了一本书，名字叫《Expert One-on-One J2EE Development without EJB》</p>
+
+<p>该书于2004年6月出版，在当时那个<strong>EJB</strong>大行其道的年代，突然出现这么一本反革命的书，瞬间JAVA帝国内就炸了锅了，人们议论纷纷，争辩不休，也就是这样，Spring彻底进入所有JAVA同学们的视野，他们小心翼翼地开始尝试这个新的东西。</p>
+
+<p>得助于上一本书的影响力，Spring核心团队扩张了，变成了五人，于是，为了再次扩大影响力，五人合力又出了一本书《Professional Java Development with the Spring Framework》
+<img src="http://localhost:4001/images/blogs/5c769484b37d0.png" alt="" /></p>
+
+<p>Spring 2.0 ~ 2.5</p>
+
+<p>2006年发布Spring 2.0 , 2007年发布Spring 2.5 。</p>
+
+<p>这一阶段，他们不仅仅是闷头做开发，还走出去听取大家的意见，看看大家需要什么功能。</p>
+
+<p>一个非常重要的功能：基于注解的依赖注入和组件扫描（ <code class="highlighter-rouge">&lt;context:   component-scan&gt;</code>  ）出现了，这一下子就解放了码农们，不用辛苦地在XML中做配置了，后来还引发了一番争论：究竟是注解配置好还是XML配置好？</p>
+
+<p>不仅如此，在Spring MVC中也引入了像@Controller这样的注解，这一下子让Web开发极为方便， Spring MVC开始攻城拔寨。</p>
+
+<p>2006年，一个叫做Ruby on Rails的框架突然崛起，号称比Java 开发快10倍， 约定重于配置，Don’t repeat yourself的思想随着RoR深入人心。</p>
+
+<p>Java 世界怎能没有应对措施？ 用Java语言去写，肯定达不到动态语言的灵活性，于是就用Groovy这个运行在JVM上的语言写了一个类似RoR的框架： Grails。</p>
+
+<p>Rod 和 Juergen他们的公司原来叫做interface21, 总部在英国，后来获得风投以后改名为SpringSource，搬到了美国， 2008年SpringSource顺势把Grails给收购了， 成功扩大了自己的疆土。</p>
+
+<p>Spring从单一的产品变成了一个生态系统。</p>
+
+<p>Spring 3.0 -&gt; 3. 2</p>
+
+<p>2009年Spring 3.0 正式发布。</p>
+
+<p>这一阶段的重大增强在Spring MVC中对RESTful的支持。 之前的Web层框架主要是Form-based ，也就是说用户提交Form，系统进行处理，渲染生成HTML。 现在RESTful成了非常热门的概念，Spring对它有了完整的支持。</p>
+
+<p>比较厉害的一点是， 在核心组件层次，和web framework 层次，Spring早期（2003,2004年）所选择的那些抽象概念被证明还是有效的，至少是可以演进的，甚至对于新的挑战，新的应用都没有问题 !</p>
+
+<p>可以演进的模型和架构是非常非常厉害的。</p>
+
+<p>另外也把生态系统中有些外围产品的特性被移到核心框架当中，例如Java Config和Sping Expression Language</p>
+
+<p>这些注解，Config都经历了10年的考验，非常长寿，至今还是主流的使用模型。</p>
+
+<p>收购！收购！收购！</p>
+
+<p>2009年，SpringSource 被VMWare以4.2亿美元收购，不仅如此，VMWare继续收购了开源的消息队列RabbitMQ，开源的缓存Redis, Gemstone等一系列著名软件，他们组成了一个叫做vFabric Application Suite的品牌。</p>
+
+<p>到了2013年， VMWare，还有它的母公司EMC，和通用电气一起又合资建立了一个叫做Pivotal Software的公司，VMWare公司那些应用层的软件，包括Spring，都被转移到了Pivotal。</p>
+
+<p>2015年，Dell又收购了EMC !</p>
+
+<p>这一连串商业操作确实让人眼花缭乱， 不管如何，Spring创始人Rod和Juergen等人应该获得了非常丰厚的回报。</p>
+
+<p>2012年7月，Spring创始人Rod Johnson离开了VMWare， 现在他是5个公司的董事会成员：
+Neo Technology
+Elasticsearch
+Atomist
+Meteor
+Hazelcast</p>
+
+<p>Spring 4.0 ~ 4.3</p>
+
+<p>不管商业操作如何，Spring还是继续发展， 2013年12月， Spring4.0 发布，这个版本开始支持JDK8 ， 甚至比JDK8 的GA版本还要早3个月！</p>
+
+<p>2014年出现了一个激动人心的东西： Spring Boot，如果说之前的Grails还是模仿的话， Spring Boot完全是从Spring基础上发展起来的，通过自动的配置和依赖管理，极大地解放了程序员。</p>
+
+<p>Spring Boot内置了Tomcat或Jetty ， 一个jar文件就可以部署，这简直就是为微服务量身定做的。</p>
+
+<p>当然，仅仅有Spring Boot还远远不足以实现一个微服务的系统，还需要很多组件来实现这样的功能：</p>
+
+<p>服务的注册和发现
+负载均衡
+服务的隔离和降级
+……
+于是，在2015年Spring Cloud 出现了。</p>
+
+<p>Spring 5.0 ： 拥抱反应式编程</p>
+
+<p>到目前为止，无论是普通的form-based的MVC，还是Restful风格的Web， 其核心都是Servlet !</p>
+
+<p>Web Container 会维护一个线程池， 当Web请求来了以后，从线程池取一个线程来处理，如果这个请求需要访问数据库，网络，那这个线程就得等着， 这就是所谓同步阻塞的模型。</p>
+
+<p>当请求过多，线程池用光以后，连最基本的请求都无法处理了。为了解决这个问题，Java 世界开始呼唤新的IO模式。</p>
+
+<p>2017年9月发布的Spring 5.0 开始拥抱新的模型：异步非阻塞， 这就是Spring WebFlux。</p>
+
+<p>后记</p>
+
+<p>提出轻量级的J2EE开发，颠覆EJB
+使用注解, Java Config
+Spring MVC
+全面支持RESTful
+Spring Boot
+Spring Cloud
+Spring WebFlux
+……</p>
+
+<p>纵观Spring 这10多年的发展，可以说Spring一直在与时俱进，不断面对新挑战，不断推出新产品，这也是它能够屹立于Java后端而不倒的原因吧 !</p>
+
+<p>简约山峰分割线</p>
+
+<p>个人广告时间， 知识星球“码农翻身”特价优惠中，原价128元/年， 优惠价：99元（截止到2月28号）。</p>
+
+<p>星球详细介绍猛戳： 码农翻身知识星球</p>
+
+<p>对于加入知识星球的同学提供特别的福利，即 编程提高群第一季和第二季的部分“加餐”视频：</p>
+
+<p>漫谈计算机组成原理和计算机编程语言
+程序的机器级表示
+漫谈操作系统之虚拟内存
+进程和线程
+新人在职场
+Java 并发编程
+如何用 Antlr 实现自定义的简单脚本语言
+缓存
+BTree 及其在数据库的应用
+分布式文件系统 FastDFS</p>
+
+<p>今年会再额外送5个：</p>
+
+<p>Web安全
+字节码和AOP
+Web SSO
+微服务入门
+漫谈文件系统</p>
+
+:ET
