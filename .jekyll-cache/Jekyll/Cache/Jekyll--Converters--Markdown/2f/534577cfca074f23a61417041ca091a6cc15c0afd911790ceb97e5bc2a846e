@@ -1,0 +1,43 @@
+I"<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+// 第一步：获取BeanFactory
+ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+
+//第二步：调用registerSingleton(String beanName, Object singletonObject)
+////第一个参数：bean名称，第二个参数：对应的引用
+beanFactory.registerSingleton("springBootBanner", printedBanner);
+////源码		
+public void registerSingleton(String beanName, Object singletonObject) throws IllegalStateException {
+        Assert.notNull(beanName, "Bean name must not be null");
+        Assert.notNull(singletonObject, "Singleton object must not be null");
+		//singletonObjects定义：Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap(256);
+		//存储的是单例bean
+        synchronized(this.singletonObjects) {
+			//判断是否已经存在
+            Object oldObject = this.singletonObjects.get(beanName);
+            if (oldObject != null) {
+                throw new IllegalStateException("Could not register object [" + singletonObject + "] under bean name '" + beanName + "': there is already object [" + oldObject + "] bound");
+            } else {
+				//没有注册过，则调用这个
+                this.addSingleton(beanName, singletonObject);
+            }
+        }
+    }
+
+protected void addSingleton(String beanName, Object singletonObject) {
+        synchronized(this.singletonObjects) {
+
+			//以下四个都是Map，具体类型如下
+			//put进Map里
+			//Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap(256);
+            this.singletonObjects.put(beanName, singletonObject);
+			//Map&lt;String, ObjectFactory&lt;?&gt;&gt; singletonFactories = new HashMap(16);
+            this.singletonFactories.remove(beanName);
+			//Map&lt;String, Object&gt; earlySingletonObjects = new HashMap(16);
+            this.earlySingletonObjects.remove(beanName);
+			//Set&lt;String&gt; registeredSingletons = new LinkedHashSet(256);
+            this.registeredSingletons.add(beanName);
+        }
+}	
+</code></pre></div></div>
+
+:ET

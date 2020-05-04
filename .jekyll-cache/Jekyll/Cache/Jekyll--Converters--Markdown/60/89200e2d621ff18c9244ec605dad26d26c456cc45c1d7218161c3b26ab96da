@@ -1,0 +1,94 @@
+I"�<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+	public SpringApplication(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources) {
+        //资源加载器，springboot传入Null
+		this.resourceLoader = resourceLoader;
+		Assert.notNull(primarySources, "PrimarySources must not be null");
+
+        //初始化了一个容器存储 启动类
+		this.primarySources = new LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));
+
+        //通过ClassPath推断Application的类型
+		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+
+		//初始化
+		setInitializers((Collection) getSpringFactoriesInstances(
+				ApplicationContextInitializer.class));
+
+		//初始化事件监听器
+		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		//根据main推断ApplicationClass
+		this.mainApplicationClass = deduceMainApplicationClass();
+	}
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ConfigurableApplicationContext run(String... args) {
+        // 1、创建并启动计时监控类
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+
+		ConfigurableApplicationContext context = null;
+		Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = new ArrayList&lt;&gt;();
+		
+        // 3、设置系统属性 `java.awt.headless` 的值，默认值为：true,允许spring在无显示器、无键盘等外界设备的情况下启动
+        configureHeadlessProperty();
+		
+        // 4、创建所有 Spring 运行监听器并发布应用启动事件
+        SpringApplicationRunListeners listeners = getRunListeners(args);
+		listeners.starting();
+
+
+		try {
+			ApplicationArguments applicationArguments = new DefaultApplicationArguments(
+					args);
+
+			//ConfigFileApplicationListener 这个类接受environmentPrepared事件，进行环境文件的解析
+			ConfigurableEnvironment environment = prepareEnvironment(listeners,
+					applicationArguments);
+			configureIgnoreBeanInfo(environment);
+
+			//启动过程中，打印springboot的标志（LOGO）
+			Banner printedBanner = printBanner(environment);
+
+			//通过反射创建了一个`org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext`
+			//这个就是Spring的上下文了，下面都是开始填补这个这个对象
+			context = createApplicationContext();
+
+			exceptionReporters = getSpringFactoriesInstances(
+					SpringBootExceptionReporter.class,
+					new Class[] { ConfigurableApplicationContext.class }, context);
+			prepareContext(context, environment, listeners, applicationArguments,
+					printedBanner);
+			refreshContext(context);
+			afterRefresh(context, applicationArguments);
+			stopWatch.stop();
+			if (this.logStartupInfo) {
+				new StartupInfoLogger(this.mainApplicationClass)
+						.logStarted(getApplicationLog(), stopWatch);
+			}
+			listeners.started(context);
+			callRunners(context, applicationArguments);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, listeners);
+			throw new IllegalStateException(ex);
+		}
+
+		try {
+			listeners.running(context);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, null);
+			throw new IllegalStateException(ex);
+		}
+		return context;
+	}
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+</code></pre></div></div>
+
+:ET

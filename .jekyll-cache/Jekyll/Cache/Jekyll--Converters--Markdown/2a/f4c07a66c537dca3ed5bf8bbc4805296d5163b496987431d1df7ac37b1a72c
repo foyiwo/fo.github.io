@@ -1,0 +1,122 @@
+I"�<p>这篇文章要解决的问题是我在阅读SpringBoot源码时，遇到的一段代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public SpringApplication(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources) {
+		......
+
+		setInitializers((Collection) getSpringFactoriesInstances(
+				ApplicationContextInitializer.class));
+
+		......
+	}	
+</code></pre></div></div>
+<p>里面是设置Spring的初始化器，而初始化器的数据来源是<code class="highlighter-rouge">getSpringFactoriesInstances</code>函数</p>
+
+<p>点击<code class="highlighter-rouge">getSpringFactoriesInstances</code>进去里面看一下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private &lt;T&gt; Collection&lt;T&gt; getSpringFactoriesInstances(Class&lt;T&gt; type,
+			Class&lt;?&gt;[] parameterTypes, Object... args) {
+		//获取类加载器
+		ClassLoader classLoader = getClassLoader();
+		
+		//获取类的全限定名
+		Set&lt;String&gt; names = new LinkedHashSet&lt;&gt;(
+				SpringFactoriesLoader.loadFactoryNames(type, classLoader));
+		
+		//根据类的全限定名，通过反射创建对象
+		List&lt;T&gt; instances = createSpringFactoriesInstances(type, parameterTypes,
+				classLoader, args, names);
+		
+		//排序
+		AnnotationAwareOrderComparator.sort(instances);
+		return instances;
+	}
+</code></pre></div></div>
+
+<p>该方法分四步进行</p>
+
+<ol>
+  <li>获取类加载器</li>
+  <li>根据传入的类的类型，获取类的全限定名列表</li>
+  <li>通过类的全限定名，利用反射进行调用</li>
+  <li>排序</li>
+</ol>
+
+<p>而这四步之中，第二步是最重要的，再点进去看看</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static List&lt;String&gt; loadFactoryNames(Class&lt;?&gt; factoryClass, @Nullable ClassLoader classLoader) {
+        String factoryClassName = factoryClass.getName();
+        return (List)loadSpringFactories(classLoader).getOrDefault(factoryClassName, Collections.emptyList());
+    }
+</code></pre></div></div>
+
+<p>该方法的逻辑分两步：</p>
+
+<ol>
+  <li>调用<code class="highlighter-rouge">loadSpringFactories(classLoader)</code>方法，获得一个List</li>
+  <li>调用List.getOrDefault()按传入的类的类型进行筛选</li>
+</ol>
+
+<p>所以，核心的是loadSpringFactories(classLoader)方法，进去看看:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private static Map&lt;String, List&lt;String&gt;&gt; loadSpringFactories(@Nullable ClassLoader classLoader) {
+        MultiValueMap&lt;String, String&gt; result = (MultiValueMap)cache.get(classLoader);
+        if (result != null) {
+            return result;
+        } else {
+            try {
+                Enumeration&lt;URL&gt; urls = classLoader != null ? classLoader.getResources("META-INF/spring.factories") : ClassLoader.getSystemResources("META-INF/spring.factories");
+                LinkedMultiValueMap result = new LinkedMultiValueMap();
+
+                while(urls.hasMoreElements()) {
+                    URL url = (URL)urls.nextElement();
+                    UrlResource resource = new UrlResource(url);
+                    Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+                    Iterator var6 = properties.entrySet().iterator();
+
+                    while(var6.hasNext()) {
+                        Entry&lt;?, ?&gt; entry = (Entry)var6.next();
+                        String factoryClassName = ((String)entry.getKey()).trim();
+                        String[] var9 = StringUtils.commaDelimitedListToStringArray((String)entry.getValue());
+                        int var10 = var9.length;
+
+                        for(int var11 = 0; var11 &lt; var10; ++var11) {
+                            String factoryName = var9[var11];
+                            result.add(factoryClassName, factoryName.trim());
+                        }
+                    }
+                }
+
+                //将加载的数据放入缓存
+                cache.put(classLoader, result);
+                return result;
+            } catch (IOException var13) {
+                throw new IllegalArgumentException("Unable to load factories from location [META-INF/spring.factories]", var13);
+            }
+        }
+    }
+</code></pre></div></div>
+
+<p>该方法相比比较复杂，先见名思意：</p>
+
+<p><code class="highlighter-rouge">loadSpringFactories</code>:load是装载的意思，所以该方法就是：装载SpringFactories，那么<code class="highlighter-rouge">SpringFactories</code>又是什么呢？</p>
+
+<hr />
+
+<p><code class="highlighter-rouge">SpringFactories</code>代表着ClassPath路径下<code class="highlighter-rouge">META-INF/spring.factories</code>文件，这个文件可不一般，它背后是SpringBoot实现的一套服务发现机制。</p>
+
+<p>而springboot的starter机制正是基于该机制完成的！</p>
+
+<p>下面我从<code class="highlighter-rouge">spring.factories</code>机制的原理和springboot自定义starter两个角度来分析说明该机制。</p>
+
+<h4 id="springfactories机制原理"><code class="highlighter-rouge">spring.factories</code>机制原理</h4>
+
+<p><code class="highlighter-rouge">spring.factories</code>是SpringBoot中内置的一套用于方便扩展的解耦机制。这种机制其实是仿照Java的SPI机制。</p>
+
+<p>参与该机制有三个角色</p>
+
+<ol>
+  <li>Spring框架：是该机制的所服务的对象</li>
+  <li><code class="highlighter-rouge">META-INF/spring.factories</code>文件：该机制的中间者</li>
+  <li>服务器提供方：如<code class="highlighter-rouge">Mybatic</code>框架实现的<code class="highlighter-rouge">starter</code></li>
+</ol>
+
+:ET
