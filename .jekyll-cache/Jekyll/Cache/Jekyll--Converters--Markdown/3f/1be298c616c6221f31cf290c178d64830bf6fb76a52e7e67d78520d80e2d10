@@ -1,0 +1,101 @@
+I"<p><strong>万物皆有起源</strong></p>
+
+<p>SpringBoot是一个优雅而复杂的框架，从此刻开始，我逐行分析其启动过程。</p>
+
+<p>接上文：<a href="/404.md">SpringBoot启动过程(一)-SpringApplication对象创建</a></p>
+
+<p>创建完<code class="highlighter-rouge">SpringApplication</code>对象后，就开始调用<code class="highlighter-rouge">run</code>方法，这里是最复杂的了,一行代码都可能代表spring的一种机制。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ConfigurableApplicationContext run(String... args) {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		ConfigurableApplicationContext context = null;
+		Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = new ArrayList&lt;&gt;();
+		configureHeadlessProperty();
+		SpringApplicationRunListeners listeners = getRunListeners(args);
+		listeners.starting();
+		try {
+			ApplicationArguments applicationArguments = new DefaultApplicationArguments(
+					args);
+			ConfigurableEnvironment environment = prepareEnvironment(listeners,
+					applicationArguments);
+			configureIgnoreBeanInfo(environment);
+			Banner printedBanner = printBanner(environment);
+			context = createApplicationContext();
+			exceptionReporters = getSpringFactoriesInstances(
+					SpringBootExceptionReporter.class,
+					new Class[] { ConfigurableApplicationContext.class }, context);
+			prepareContext(context, environment, listeners, applicationArguments,
+					printedBanner);
+			refreshContext(context);
+			afterRefresh(context, applicationArguments);
+			stopWatch.stop();
+			if (this.logStartupInfo) {
+				new StartupInfoLogger(this.mainApplicationClass)
+						.logStarted(getApplicationLog(), stopWatch);
+			}
+			listeners.started(context);
+			callRunners(context, applicationArguments);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, listeners);
+			throw new IllegalStateException(ex);
+		}
+
+		try {
+			listeners.running(context);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, null);
+			throw new IllegalStateException(ex);
+		}
+		return context;
+	}
+
+</code></pre></div></div>
+
+<p>复杂的事情要简单化，按照惯例，我们还是逐行分析</p>
+
+<h4 id="第12行">第1~2行</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>StopWatch stopWatch = new StopWatch();
+stopWatch.start();
+</code></pre></div></div>
+<p>这个是时间监听器，用于统计程序的执行时长的，不是主线，暂不分析。</p>
+
+<h4 id="第34行">第3~4行</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ConfigurableApplicationContext context = null;
+Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = new ArrayList&lt;&gt;();
+</code></pre></div></div>
+<ul>
+  <li>定义一个ConfigurableApplicationContext对象，请注意，笼统来说，spring的启动过程就是装配这个对象的过程。</li>
+  <li>初始化了一个<code class="highlighter-rouge">SpringBootExceptionReporter</code>集合，该集合类似<code class="highlighter-rouge">Listeners</code>,也是一个钩子，会被spring回调，由于这里是初始化，暂且不展开分析</li>
+</ul>
+
+<h4 id="第5行">第5行</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>configureHeadlessProperty();
+
+-------------
+//点击进入该方法
+private void configureHeadlessProperty() {
+	System.setProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS, System.getProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS, Boolean.toString(this.headless)));
+}
+//备注：
+private static final String SYSTEM_PROPERTY_JAVA_AWT_HEADLESS = "java.awt.headless";
+</code></pre></div></div>
+<p>我提炼了一下该方法如下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>System.setProperty("java.awt.headless", "true");
+</code></pre></div></div>
+<p>就是把系统中的<code class="highlighter-rouge">java.awt.headless</code>设置为<code class="highlighter-rouge">true</code>，有什么用？</p>
+
+<hr />
+<p><code class="highlighter-rouge">headless</code>其实是一种运行配置模式、一种标志；他指示该程序运行的环境(服务器)可能缺少显示设备、键盘、鼠标等设备，要求程序如果在需要这些设备时，通过计算机自行模拟。</p>
+
+<p>现我们的springboot程序在生产环境，几乎都是部署在Linux服务器上的，所以都没有其他外设。</p>
+
+<h4 id="第67行">第6~7行</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SpringApplicationRunListeners listeners = getRunListeners(args);
+listeners.starting();
+</code></pre></div></div>
+<p>这两行代码涉及到了Spring的事件监听机制，篇幅较长，另开文章：</p>
+
+:ET

@@ -1,0 +1,70 @@
+I"l<p><strong>万物皆有起源</strong></p>
+
+<p>SpringBoot是一个优雅而复杂的框架，从此刻开始，我逐行分析其启动过程。</p>
+
+<p>接上文：<a href="/404.md">SpringBoot启动过程(一)-SpringApplication对象创建</a></p>
+
+<p>创建完<code class="highlighter-rouge">SpringApplication</code>对象后，就开始调用<code class="highlighter-rouge">run</code>方法，这里是最复杂的了,一行代码都可能代表spring的一种机制。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ConfigurableApplicationContext run(String... args) {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		ConfigurableApplicationContext context = null;
+		Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = new ArrayList&lt;&gt;();
+		configureHeadlessProperty();
+		SpringApplicationRunListeners listeners = getRunListeners(args);
+		listeners.starting();
+		try {
+			ApplicationArguments applicationArguments = new DefaultApplicationArguments(
+					args);
+			ConfigurableEnvironment environment = prepareEnvironment(listeners,
+					applicationArguments);
+			configureIgnoreBeanInfo(environment);
+			Banner printedBanner = printBanner(environment);
+			context = createApplicationContext();
+			exceptionReporters = getSpringFactoriesInstances(
+					SpringBootExceptionReporter.class,
+					new Class[] { ConfigurableApplicationContext.class }, context);
+			prepareContext(context, environment, listeners, applicationArguments,
+					printedBanner);
+			refreshContext(context);
+			afterRefresh(context, applicationArguments);
+			stopWatch.stop();
+			if (this.logStartupInfo) {
+				new StartupInfoLogger(this.mainApplicationClass)
+						.logStarted(getApplicationLog(), stopWatch);
+			}
+			listeners.started(context);
+			callRunners(context, applicationArguments);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, listeners);
+			throw new IllegalStateException(ex);
+		}
+
+		try {
+			listeners.running(context);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, null);
+			throw new IllegalStateException(ex);
+		}
+		return context;
+	}
+
+</code></pre></div></div>
+
+<p>复杂的事情要简单化，按照惯例，我们还是逐行分析</p>
+
+<h4 id="第12行">第1~2行</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>StopWatch stopWatch = new StopWatch();
+stopWatch.start();
+</code></pre></div></div>
+<p>这个是时间监听器，用于统计程序的执行时长的，不是主线，暂不分析。</p>
+
+<h4 id="第3行">第3行</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ConfigurableApplicationContext context = null;
+</code></pre></div></div>
+<p>定义一个ConfigurableApplicationContext对象，请注意，笼统来说，spring的启动过程就是装配这个对象的过程。</p>
+
+:ET

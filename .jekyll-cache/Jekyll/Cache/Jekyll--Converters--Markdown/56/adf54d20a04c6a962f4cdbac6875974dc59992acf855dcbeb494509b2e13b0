@@ -1,0 +1,78 @@
+I"(<p>这篇文章要解决的问题是我在阅读SpringBoot源码时，遇到的一段代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public SpringApplication(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources) {
+		......
+
+		setInitializers((Collection) getSpringFactoriesInstances(
+				ApplicationContextInitializer.class));
+
+		......
+	}	
+</code></pre></div></div>
+<p>这里主要关注：<code class="highlighter-rouge">setInitializers()</code></p>
+
+<p>点击<code class="highlighter-rouge">setInitializers</code>进去里面看一下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public void setInitializers(
+			Collection&lt;? extends ApplicationContextInitializer&lt;?&gt;&gt; initializers) {
+		this.initializers = new ArrayList&lt;&gt;();
+		this.initializers.addAll(initializers);
+	}
+
+</code></pre></div></div>
+<p>而<code class="highlighter-rouge">this.initializers</code>定义源码如下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class SpringApplication {
+	......
+
+	private List&lt;ApplicationContextInitializer&lt;?&gt;&gt; initializers;
+
+	......
+}
+</code></pre></div></div>
+
+<p>从这点线索可以知道，<code class="highlighter-rouge">this.initializers</code>是在SpringBoot初始化过程中赋值的一个私有变量，那有什么用呢？</p>
+
+<p>从翻译来看，<code class="highlighter-rouge">initializers</code>是初始化的意思，那到底是不是初始化？又初始化了什么？我继续去找线索。</p>
+
+<p>回到这两段代码</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//调用
+setInitializers((Collection) getSpringFactoriesInstances(
+				ApplicationContextInitializer.class));
+
+//定义
+public void setInitializers(
+			Collection&lt;? extends ApplicationContextInitializer&lt;?&gt;&gt; initializers) {
+		this.initializers = new ArrayList&lt;&gt;();
+		this.initializers.addAll(initializers);
+	}			
+</code></pre></div></div>
+<p>可以看到，<code class="highlighter-rouge">setInitializers</code>只接收一个继承了<code class="highlighter-rouge">ApplicationContextInitializer</code>接口实现类组成的集合。</p>
+
+<p>而这个集合是通过方法：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getSpringFactoriesInstances(
+				ApplicationContextInitializer.class)
+</code></pre></div></div>
+
+<p>关于<code class="highlighter-rouge">getSpringFactoriesInstances</code>的使用和原理，请前往我另外一篇文章：</p>
+
+<p>传送门：<a href="http://localhost:4001/spring-2.0.0-spring-factories">Spring-Spring.Factories机制源码级分析</a></p>
+
+<p>至此，我知道了通过<code class="highlighter-rouge">getSpringFactoriesInstances</code>方法可以获取到实现了<code class="highlighter-rouge">ApplicationContextInitializer</code>接口的所有实现类。</p>
+
+<p>默认情况下，springboot提供了6个实现类，都是从spring.factories文件里读取出来的。</p>
+
+<p>如图：
+<img src="/images/blogs/spring-init.png" alt="" /></p>
+
+<p>到现在，我知道了这段代码是将声明在<code class="highlighter-rouge">spring.factories</code>文件里的<code class="highlighter-rouge">ApplicationContextInitializer</code>接口的实现类都读取出来，并通过反射创建对象，最后将该对象赋值到<code class="highlighter-rouge">SpringApplication</code>对象的<code class="highlighter-rouge">initializers</code>属性里。</p>
+
+<p>另外，默认情况下，springboot提供了6个实现类。</p>
+
+<p>我稍微整理了一下，接下来我们要探讨的是以下几个问题：</p>
+
+<ol>
+  <li><code class="highlighter-rouge">ApplicationContextInitializer</code>实现类的意义和作用是什么?</li>
+  <li><code class="highlighter-rouge">ApplicationContextInitializer</code>实现类在哪里被调用？</li>
+  <li><code class="highlighter-rouge">ApplicationContextInitializer</code>实现类除了默认的6个，还能由我们开发员新增吗？</li>
+</ol>
+
+:ET

@@ -1,9 +1,9 @@
 ---
 layout: post
-title: SpringBoot启动过程(一)
+title: SpringBoot启动过程(一)-SpringApplication对象创建
 description: ""
 modified: 2014-12-24
-tags: [SpringBoot - 极速开发]
+tags: [SpringBoot - 源码系列]
 
 ---
 
@@ -106,12 +106,27 @@ static WebApplicationType deduceFromClasspath() {
 
 而目前我们绝大部分还是使用SpringMVC，所以推断的结果基本还是`SERVLET`,所以最终启动的就是`Tomcat`服务器
 
-**第五行：**`setInitializers((Collection) getSpringFactoriesInstances(
-				ApplicationContextInitializer.class));`
+**第五行：**`setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));`
 
 这行代码需要静下心来揣摩和理解，它涉及到了Spring的蛮多方面，由于述说起来篇幅较长，另外一篇文章述说：
 
 传送门：[Spring-初始化器(Initializers)]({{site.url}}/spring-2.0.1-Initializers/)
+
+**第六行：**`setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));`
+
+这行代码需要静下心来揣摩和理解，它涉及到了Spring的蛮多方面，由于述说起来篇幅较长，另外一篇文章述说：
+
+传送门：[Spring-事件监听器器(Listener)]({{site.url}}/spring-2.0.1-Listener)
+
+**第七行：**`this.mainApplicationClass = deduceMainApplicationClass();`
+推断出含有main函数的类
+
+至此，创建`SpringApplication`对象的代码分析完毕了
+
+**总结：**
+- 设置了默认初始化器
+- 设置了默认监听器
+
 
 
 

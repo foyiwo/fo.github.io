@@ -1,0 +1,114 @@
+I"�<p><strong>万物皆有起源</strong></p>
+
+<p>SpringBoot是一个优雅而复杂的框架，从此刻开始，我逐行分析其启动过程。</p>
+
+<h4 id="一springboot启动源码-入口代码">一、SpringBoot启动源码-入口代码</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//入口
+@SpringBootApplication
+public class MallWebApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MallWebApplication.class,args);
+    }
+}
+</code></pre></div></div>
+<p>以上便是SpringBoot的启动入口代码，简单的不得了，当<code class="highlighter-rouge">run</code>方法成功返回时，Spring也就启动成功了。</p>
+
+<p>那到底怎么启动的呢？废话不多说，开始源码之旅。</p>
+
+<p><strong>该部分涉及到的知识点：</strong></p>
+
+<ul>
+  <li>Java注解的用法与原理</li>
+  <li>Class对象的原理</li>
+</ul>
+
+<h4 id="二-springboot启动源码-创建springapplication对象">二、 SpringBoot启动源码-创建SpringApplication对象</h4>
+<p>跟着<code class="highlighter-rouge">run</code>方法的源码进去不多时，即遇到了第一道关卡，代码中New了一个SpringApplication对象，现在来分析一下这个类是什么和创建这个类的时候做了什么。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public SpringApplication(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources) {
+		this.resourceLoader = resourceLoader;
+		Assert.notNull(primarySources, "PrimarySources must not be null");
+		this.primarySources = new LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));
+		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		setInitializers((Collection) getSpringFactoriesInstances(
+				ApplicationContextInitializer.class));
+		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		this.mainApplicationClass = deduceMainApplicationClass();
+	}
+</code></pre></div></div>
+
+<p><strong>SpringApplication类</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  public class SpringApplication {
+  }
+</code></pre></div></div>
+<p>该类没有继承任何父类或接口，真是个单纯的类，在Spring里的很少见的了，所以该类是一个单纯的启动工具类，他的调用<code class="highlighter-rouge">run</code>方法后，返回的是<code class="highlighter-rouge">ConfigurableApplicationContext</code>这个才是真正的容器上下文。</p>
+
+<p><strong>SpringApplication构造函数里构造了什么？</strong></p>
+
+<p>跟着构造函数里的代码，我们逐行来：</p>
+
+<p><strong>第一行：</strong><code class="highlighter-rouge">this.resourceLoader = resourceLoader;</code></p>
+
+<p>resourceLoader的数据类型是：<code class="highlighter-rouge">ResourceLoader</code>,这个涉及到了Spring的资源加载机制：<code class="highlighter-rouge">Resource</code>，里面运用了<code class="highlighter-rouge">策略模式</code>，实现了以统一的方式对Spring可能运用到的资源进行访问。所以<code class="highlighter-rouge">resourceLoader</code>变量是一个资源的统一加载器，此时启动的时候赋的是<code class="highlighter-rouge">null</code>值，没有意义。</p>
+
+<p><strong>第三行：</strong><code class="highlighter-rouge">this.primarySources = new LinkedHashSet&lt;&gt;(Arrays.asList(primarySources))</code>;</p>
+
+<p>参数<code class="highlighter-rouge">primarySources</code>是我们开发者自建的启动类的Class对象，这里就只是单纯的把该对象存储进<code class="highlighter-rouge">SpringApplication</code>对象的成员字段<code class="highlighter-rouge">primarySources</code>中，以备后用。</p>
+
+<p><strong>第四行：</strong> <code class="highlighter-rouge">this.webApplicationType = WebApplicationType.deduceFromClasspath();</code></p>
+
+<p>深入去看该方法的实现：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static WebApplicationType deduceFromClasspath() {
+		if (ClassUtils.isPresent(WEBFLUX_INDICATOR_CLASS, null)
+				&amp;&amp; !ClassUtils.isPresent(WEBMVC_INDICATOR_CLASS, null)
+				&amp;&amp; !ClassUtils.isPresent(JERSEY_INDICATOR_CLASS, null)) {
+			return WebApplicationType.REACTIVE;
+		}
+		for (String className : SERVLET_INDICATOR_CLASSES) {
+			if (!ClassUtils.isPresent(className, null)) {
+				return WebApplicationType.NONE;
+			}
+		}
+		return WebApplicationType.SERVLET;
+	}
+
+</code></pre></div></div>
+<p>首先，我们理解一下这个方法是要干嘛；</p>
+
+<p><code class="highlighter-rouge">deduce</code>的中文是：<code class="highlighter-rouge">推断</code>;<code class="highlighter-rouge">deduceFromClasspath</code>的意思就是从Classpath中推断是某个事情的意思，然后他的返回值类型：<code class="highlighter-rouge">WebApplicationType</code>,所以该方法就是通过Classpath中推断出应用的类型。那么应用有多少种类型呢? 看代码我发现有三种：</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">WebApplicationType.NONE</code></p>
+
+    <p>该类型的应用不是Web应用，所以也不会启动内嵌的Web服务器</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">WebApplicationType.SERVLET</code></p>
+
+    <p>该类型的应用是servletWeb应用程序，运行时会启动一个内嵌的servlet服务器</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">WebApplicationType.REACTIVE</code></p>
+
+    <p>该类型的应用是响应式应用，运行时会启动一个内嵌的响应式服务器</p>
+  </li>
+</ul>
+
+<p>结论很清晰，这个方法就是用来确定该应用的类型，<code class="highlighter-rouge">SERVLET</code>对应我们最经常用的<code class="highlighter-rouge">SpringMVC</code>，而<code class="highlighter-rouge">REACTIVE</code>则对应的是最新的<code class="highlighter-rouge">Spring-Webflux</code></p>
+
+<p>而目前我们绝大部分还是使用SpringMVC，所以推断的结果基本还是<code class="highlighter-rouge">SERVLET</code>,所以最终启动的就是<code class="highlighter-rouge">Tomcat</code>服务器</p>
+
+<p><strong>第五行：</strong><code class="highlighter-rouge">setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));</code></p>
+
+<p>这行代码需要静下心来揣摩和理解，它涉及到了Spring的蛮多方面，由于述说起来篇幅较长，另外一篇文章述说：</p>
+
+<p>传送门：<a href="http://localhost:4001/spring-2.0.1-Initializers/">Spring-初始化器(Initializers)</a></p>
+
+<p><strong>第六行：</strong><code class="highlighter-rouge">setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));</code></p>
+
+<p>这行代码需要静下心来揣摩和理解，它涉及到了Spring的蛮多方面，由于述说起来篇幅较长，另外一篇文章述说：</p>
+
+<p>传送门：<a href="http://localhost:4001/spring-2.0.1-Listener">Spring-事件监听器器(Listener)</a></p>
+
+:ET
